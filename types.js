@@ -1,3 +1,5 @@
+const isArray = [].constructor.isArray;
+
 export class BaseType {
   static matches(val) {
     console.error(`A matches function needs to be defined for "${this.name}"`);
@@ -33,7 +35,7 @@ export class Boolean extends BaseType {
 
 export class Array extends BaseType {
   static matches(val) {
-    return [].constructor.isArray(val);
+    return isArray(val);
   }
 
   static ofType(memberType) {
@@ -47,7 +49,7 @@ export class Array extends BaseType {
 
 class ObjectType extends BaseType {
   static matches(val) {
-    return typeof val === 'object' && ![].constructor.isArray(val) && val !== null;
+    return typeof val === 'object' && !isArray(val) && val !== null;
   }
 
   static withDefinition(definition) {
