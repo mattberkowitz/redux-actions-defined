@@ -1,4 +1,5 @@
-export const nativeTypeMap = new Map()
+/* eslint-disable no-use-before-define */
+export const nativeTypeMap = new Map();
 
 export function coerce(type) {
   if (typeof type.matches === 'function') {
@@ -44,7 +45,7 @@ export class BaseType {
       static matches(val) {
         return super.matches(val) || val === undefined || val === null;
       }
-    }
+    };
   }
 }
 
@@ -78,7 +79,7 @@ class ArrayType extends BaseType {
   }
 
   static ofType(memberType) {
-    const coercedType = coerce(memberType)
+    const coercedType = coerce(memberType);
     return class ArrayOfType extends this {
       static get type() {
         return coercedType;
@@ -86,7 +87,7 @@ class ArrayType extends BaseType {
       static matches(val) {
         return super.matches(val) && val.every((itemVal) => this.type.matches(itemVal));
       }
-    }
+    };
   }
 }
 
@@ -101,7 +102,7 @@ class ObjectType extends BaseType {
     const coercedDefinition = Object.keys(definition).reduce((o, key) => {
       o[key] = coerce(definition[key]);
       return o;
-    }, {})
+    }, {});
     return class ObjectWithDefinition extends this {
       static get properties() {
         return coercedDefinition;
@@ -112,7 +113,7 @@ class ObjectType extends BaseType {
           && Object.keys(definition).every((key) => this.properties[key].matches(val[key]))
           && Object.keys(val).every(key => !!this.properties[key]);
       }
-    }
+    };
   }
 }
 
@@ -126,7 +127,7 @@ class AnyType extends BaseType {
 
 export class UnionType extends BaseType {
   static get types() {
-    console.error('This type is meant to be extended with an overrided static types property. It\'s suggested to use unionOf() to generate a new union')
+    console.error('This type is meant to be extended with an overrided static types property. It\'s suggested to use unionOf() to generate a new union');
     return [];
   }
   static matches(val) {
@@ -140,7 +141,7 @@ export function unionOf(...unionTypes) {
     static get types() {
       return coercedTypes;
     }
-  }
+  };
 }
 
 export {

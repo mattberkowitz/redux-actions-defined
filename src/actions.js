@@ -1,4 +1,4 @@
-import { addAction, actionExists, validateActionPayload, getCreatorForAction } from './action-store'
+import { addAction, actionExists, getCreatorForAction } from './action-store';
 
 export function defineAction(type, schema) {
   if (!actionExists(type)) {

@@ -1,9 +1,13 @@
-import * as types from './types'
+import * as types from './types';
 
 // look at redoing some of this
 // maybe export a static class rather than a bunch of functions
 
 const actionSchemaStore = {};
+
+export function actionExists(type) {
+  return !!actionSchemaStore[type];
+}
 
 export function getActionSchema(type) {
   if (!actionExists(type)) {
@@ -23,14 +27,10 @@ export function getActions() {
   return Object.keys(actionSchemaStore);
 }
 
-export function actionExists(type) {
-  return !!actionSchemaStore[type];
-}
-
 export function addAction(type, schema) {
   actionSchemaStore[type] = {
     raw: schema,
-    coerced: types.coerce(schema)
+    coerced: types.coerce(schema),
   };
 }
 
@@ -53,7 +53,7 @@ export function validateActionPayload(type, payload) {
 export function getCreatorForAction(type) {
   function actionCreator(payload) {
     if (!validateActionPayload(type, payload)) {
-      console.error(`The provided payload does not match the schema for "${type}"`)
+      console.error(`The provided payload does not match the schema for "${type}"`);
     }
     return {
       type,
@@ -62,17 +62,17 @@ export function getCreatorForAction(type) {
   }
 
   actionCreator.newCreator = function generatorCreator(creatorFn) {
-    return function(...args) {
-      const payload = creatorFn(...args)
+    return function generatedCreator(...args) {
+      const payload = creatorFn(...args);
       if (!validateActionPayload(type, payload)) {
-        console.error(`The provided payload does not match the schema for "${type}"`)
+        console.error(`The provided payload does not match the schema for "${type}"`);
       }
       return {
         type,
-        payload
-      }
-    }
-  }
+        payload,
+      };
+    };
+  };
 
   return actionCreator;
 }

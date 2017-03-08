@@ -1,6 +1,6 @@
-import { actionExists, validateActionPayload } from './aciton-store';
+import { actionExists, validateActionPayload } from './action-store';
 
-export default function actionSchemaMiddleware() {
+export default function reduxActionsDefinedMiddleware() {
   return store => next => action => {
     if (!actionExists(action.type)) {
       console.error(`Action ${action.type} has not been registerd`);
