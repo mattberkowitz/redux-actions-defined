@@ -63,7 +63,7 @@ export function getCreatorForAction(type) {
 
   actionCreator.newCreator = function generatorCreator(creatorFn) {
     return function(...args) {
-      cosnt payload = creatorFn(...args)
+      const payload = creatorFn(...args)
       if (!validateActionPayload(type, payload)) {
         console.error(`The provided payload does not match the schema for "${type}"`)
       }
