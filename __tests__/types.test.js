@@ -291,5 +291,20 @@ describe('type coersion', () => {
       expect(coercedObject.properties.baz.properties.test1).toBe(types.String);
       expect(coercedObject.properties.baz.properties.test2).toBe(types.Boolean);
     });
+  });
+  describe('classes', () => {
+    test('if class defines static matches uses class', () => {
+      class TestClass {
+        static matches(val) { return true; }
+      }
+      expect(types.coerce(TestClass)).toBe(TestClass)
+    })
+    test('if class doesn\'t define static matches, extended it to add a generic matches for instanceof', () => {
+      class TestClass {}
+      const coercedClass = types.coerce(TestClass);
+      expect(coercedClass.prototype instanceof TestClass).toBe(true);
+      expect(coercedClass).not.toBe(TestClass);
+      expect(coercedClass.matches(new TestClass())).toBe(true);
+    })
   })
 })

@@ -15,13 +15,12 @@ export function coerce(type) {
       }
     } else if (type.constructor === Object) {
       derivedType = ObjectType;
-      const keys = Object.keys(type);
-      if (keys.length) {
+      if (Object.keys(type).length) {
         derivedType = derivedType.withDefinition(type);
       }
     } else {
       derivedType = class ExtendedObjectType extends type {
-        matches(val) {
+        static matches(val) {
           return val instanceof type;
         }
       };

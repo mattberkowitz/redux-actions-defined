@@ -1,4 +1,4 @@
-import { createAction } from '../actions';
+import { defineAction } from '../actions';
 import { getRawActionSchema, clearActions } from '../action-store';
 import * as types from '../types';
 
@@ -6,9 +6,9 @@ afterEach(() => {
   clearActions();
 })
 
-describe('createAction', () => {
+describe('defineAction', () => {
   test('creating an action returns type, schema, and creator for action. schema can be retrieved with getActionSchema', () => {
-    const { type, schema, creator } = createAction('testAction', {
+    const { type, schema, creator } = defineAction('testAction', {
       test1: types.String,
       test2: types.Array.ofType(types.String),
     });
@@ -30,12 +30,12 @@ describe('createAction', () => {
   test('attempting to create an already existing action will return null and not overwrite existing schema', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const testAction = createAction('testAction', {
+    const testAction = defineAction('testAction', {
       test1: types.String,
       test2: types.Array.ofType(types.String),
     });
 
-    const testAction2 = createAction('testAction', {
+    const testAction2 = defineAction('testAction', {
       foo: types.String,
       bar: types.String
     });
