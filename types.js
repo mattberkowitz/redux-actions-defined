@@ -1,4 +1,38 @@
-const isArray = [].constructor.isArray;
+export const nativeTypeMap = new Map()
+
+export function coerce(type) {
+  if (typeof type.matches === 'function') {
+    return type;
+  }
+  let derivedType = nativeTypeMap.get(type);
+  if (!derivedType) {
+    if (Array.isArray(type)) {
+      derivedType = ArrayType;
+      if (type.length === 1) {
+        derivedType = derivedType.ofType(type[0]);
+      } else if (type.length > 1) {
+        derivedType = derivedType.ofType(unionOf(...type));
+      }
+    } else if (type.constructor === Object) {
+      derivedType = ObjectType;
+      const keys = Object.keys(type);
+      if (keys.length) {
+        derivedType = derivedType.withDefinition(type);
+      }
+    } else {
+      derivedType = class ExtendedObjectType extends type {
+        matches(val) {
+          return val instanceof type;
+        }
+      };
+    }
+  }
+  return derivedType;
+}
+
+export function matches(type, val) {
+  return type.matches(val);
+}
 
 export class BaseType {
   static matches(val) {
@@ -15,67 +49,107 @@ export class BaseType {
   }
 }
 
-export class String extends BaseType {
+class StringType extends BaseType {
   static matches(val) {
     return typeof val === 'string';
   }
 }
 
-export class Number extends BaseType {
+nativeTypeMap.set(String, StringType);
+
+class NumberType extends BaseType {
   static matches(val) {
     return typeof val === 'number';
   }
 }
 
-export class Boolean extends BaseType {
+nativeTypeMap.set(Number, NumberType);
+
+class BooleanType extends BaseType {
   static matches(val) {
     return typeof val === 'boolean';
   }
 }
 
-export class Array extends BaseType {
+nativeTypeMap.set(Boolean, BooleanType);
+
+class ArrayType extends BaseType {
   static matches(val) {
-    return isArray(val);
+    return Array.isArray(val);
   }
 
   static ofType(memberType) {
+    const coercedType = coerce(memberType)
     return class ArrayOfType extends this {
+      static get type() {
+        return coercedType;
+      }
       static matches(val) {
-        return super.matches(val) && val.every((itemVal) => memberType.matches(itemVal));
+        return super.matches(val) && val.every((itemVal) => this.type.matches(itemVal));
       }
     }
   }
 }
+
+nativeTypeMap.set(Array, ArrayType);
 
 class ObjectType extends BaseType {
   static matches(val) {
-    return typeof val === 'object' && !isArray(val) && val !== null;
+    return typeof val === 'object' && !Array.isArray(val) && val !== null;
   }
 
   static withDefinition(definition) {
+    const coercedDefinition = Object.keys(definition).reduce((o, key) => {
+      o[key] = coerce(definition[key]);
+      return o;
+    }, {})
     return class ObjectWithDefinition extends this {
+      static get properties() {
+        return coercedDefinition;
+      }
+
       static matches(val) {
         return super.matches(val)
-          && Object.keys(definition).every((key) => definition[key].matches(val[key]))
-          && Object.keys(val).every(key => !!definition[key]);
+          && Object.keys(definition).every((key) => this.properties[key].matches(val[key]))
+          && Object.keys(val).every(key => !!this.properties[key]);
       }
     }
   }
 }
 
-// `export Object extends BaseType {}` was breaking when run through babel so do this instead
-export { ObjectType as Object };
+nativeTypeMap.set(Object, ObjectType);
 
-export class Any extends BaseType {
+class AnyType extends BaseType {
   static matches(val) {
     return val !== undefined && val !== null;
   }
 }
 
+export class UnionType extends BaseType {
+  static get types() {
+    console.error('This type is meant to be extended with an overrided static types property. It\'s suggested to use unionOf() to generate a new union')
+    return [];
+  }
+  static matches(val) {
+    return this.types.some((type) => type.matches(val));
+  }
+}
+
 export function unionOf(...unionTypes) {
-  return class UnionType extends BaseType {
-    static matches(val) {
-      return unionTypes.some((type) => type.matches(val));
+  const coercedTypes = unionTypes.map(coerce);
+  return class DefinedUnionType extends UnionType {
+    static get types() {
+      return coercedTypes;
     }
   }
 }
+
+export {
+  StringType as String,
+  NumberType as Number,
+  BooleanType as Boolean,
+  ObjectType as Object,
+  ArrayType as Array,
+  AnyType as Any,
+  UnionType as Union,
+};
