@@ -1,5 +1,8 @@
 import * as types from './types'
 
+// look at redoing some of this
+// maybe export a static class rather than a bunch of functions
+
 const actionSchemaStore = {};
 
 export function getActionSchema(type) {
@@ -48,7 +51,7 @@ export function validateActionPayload(type, payload) {
 }
 
 export function getCreatorForAction(type) {
-  return function actionCreator(payload) {
+  function actionCreator(payload) {
     if (!validateActionPayload(type, payload)) {
       console.error(`The provided payload does not match the schema for "${type}"`)
     }
@@ -57,4 +60,19 @@ export function getCreatorForAction(type) {
       payload,
     };
   }
+
+  actionCreator.newCreator = function generatorCreator(creatorFn) {
+    return function(...args) {
+      cosnt payload = creatorFn(...args)
+      if (!validateActionPayload(type, payload)) {
+        console.error(`The provided payload does not match the schema for "${type}"`)
+      }
+      return {
+        type,
+        payload
+      }
+    }
+  }
+
+  return actionCreator;
 }
