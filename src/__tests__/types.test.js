@@ -12,14 +12,14 @@ describe('defined types', () => {
       expect(types.String.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches strings, null, and undefined', () => {
-      expect(types.String.optional().matches("test")).toBe(true);
-      expect(types.String.optional().matches(1)).toBe(false);
-      expect(types.String.optional().matches(true)).toBe(false);
-      expect(types.String.optional().matches([])).toBe(false);
-      expect(types.String.optional().matches({})).toBe(false);
-      expect(types.String.optional().matches(null)).toBe(true);
-      expect(types.String.optional().matches(undefined)).toBe(true);
+    test('optional matches strings, null, and undefined', () => {
+      expect(types.String.optional.matches("test")).toBe(true);
+      expect(types.String.optional.matches(1)).toBe(false);
+      expect(types.String.optional.matches(true)).toBe(false);
+      expect(types.String.optional.matches([])).toBe(false);
+      expect(types.String.optional.matches({})).toBe(false);
+      expect(types.String.optional.matches(null)).toBe(true);
+      expect(types.String.optional.matches(undefined)).toBe(true);
     })
   })
 
@@ -34,14 +34,14 @@ describe('defined types', () => {
       expect(types.Number.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches numbers, null, and undefined', () => {
-      expect(types.Number.optional().matches("test")).toBe(false);
-      expect(types.Number.optional().matches(1)).toBe(true);
-      expect(types.Number.optional().matches(true)).toBe(false);
-      expect(types.Number.optional().matches([])).toBe(false);
-      expect(types.Number.optional().matches({})).toBe(false);
-      expect(types.Number.optional().matches(null)).toBe(true);
-      expect(types.Number.optional().matches(undefined)).toBe(true);
+    test('optional matches numbers, null, and undefined', () => {
+      expect(types.Number.optional.matches("test")).toBe(false);
+      expect(types.Number.optional.matches(1)).toBe(true);
+      expect(types.Number.optional.matches(true)).toBe(false);
+      expect(types.Number.optional.matches([])).toBe(false);
+      expect(types.Number.optional.matches({})).toBe(false);
+      expect(types.Number.optional.matches(null)).toBe(true);
+      expect(types.Number.optional.matches(undefined)).toBe(true);
     })
   })
 
@@ -56,14 +56,14 @@ describe('defined types', () => {
       expect(types.Boolean.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches booleans, null, and undefined', () => {
-      expect(types.Boolean.optional().matches("test")).toBe(false);
-      expect(types.Boolean.optional().matches(1)).toBe(false);
-      expect(types.Boolean.optional().matches(true)).toBe(true);
-      expect(types.Boolean.optional().matches([])).toBe(false);
-      expect(types.Boolean.optional().matches({})).toBe(false);
-      expect(types.Boolean.optional().matches(null)).toBe(true);
-      expect(types.Boolean.optional().matches(undefined)).toBe(true);
+    test('optional matches booleans, null, and undefined', () => {
+      expect(types.Boolean.optional.matches("test")).toBe(false);
+      expect(types.Boolean.optional.matches(1)).toBe(false);
+      expect(types.Boolean.optional.matches(true)).toBe(true);
+      expect(types.Boolean.optional.matches([])).toBe(false);
+      expect(types.Boolean.optional.matches({})).toBe(false);
+      expect(types.Boolean.optional.matches(null)).toBe(true);
+      expect(types.Boolean.optional.matches(undefined)).toBe(true);
     });
   });
 
@@ -78,14 +78,14 @@ describe('defined types', () => {
       expect(types.Array.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches arrays, null, and undefined', () => {
-      expect(types.Array.optional().matches("test")).toBe(false);
-      expect(types.Array.optional().matches(1)).toBe(false);
-      expect(types.Array.optional().matches(true)).toBe(false);
-      expect(types.Array.optional().matches([])).toBe(true);
-      expect(types.Array.optional().matches({})).toBe(false);
-      expect(types.Array.optional().matches(null)).toBe(true);
-      expect(types.Array.optional().matches(undefined)).toBe(true);
+    test('optional matches arrays, null, and undefined', () => {
+      expect(types.Array.optional.matches("test")).toBe(false);
+      expect(types.Array.optional.matches(1)).toBe(false);
+      expect(types.Array.optional.matches(true)).toBe(false);
+      expect(types.Array.optional.matches([])).toBe(true);
+      expect(types.Array.optional.matches({})).toBe(false);
+      expect(types.Array.optional.matches(null)).toBe(true);
+      expect(types.Array.optional.matches(undefined)).toBe(true);
     })
 
     describe('ofType()', () => {
@@ -95,7 +95,7 @@ describe('defined types', () => {
         expect(types.Array.ofType(types.String).matches([false])).toBe(false);
       });
 
-      test('optional() matches if the items in the array all match the type also matches null or undefined', () => {
+      test('optional matches if the items in the array all match the type also matches null or undefined', () => {
         expect(types.Array.ofType(types.String).matches(["test"])).toBe(true);
         expect(types.Array.ofType(types.String).matches([1])).toBe(false);
         expect(types.Array.ofType(types.String).matches([false])).toBe(false);
@@ -116,21 +116,21 @@ describe('defined types', () => {
       expect(types.Object.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches any value including null or undefined', () => {
-      expect(types.Object.optional().matches("test")).toBe(false);
-      expect(types.Object.optional().matches(1)).toBe(false);
-      expect(types.Object.optional().matches(true)).toBe(false);
-      expect(types.Object.optional().matches([])).toBe(false);
-      expect(types.Object.optional().matches({})).toBe(true);
-      expect(types.Object.optional().matches(null)).toBe(true);
-      expect(types.Object.optional().matches(undefined)).toBe(true);
+    test('optional matches any value including null or undefined', () => {
+      expect(types.Object.optional.matches("test")).toBe(false);
+      expect(types.Object.optional.matches(1)).toBe(false);
+      expect(types.Object.optional.matches(true)).toBe(false);
+      expect(types.Object.optional.matches([])).toBe(false);
+      expect(types.Object.optional.matches({})).toBe(true);
+      expect(types.Object.optional.matches(null)).toBe(true);
+      expect(types.Object.optional.matches(undefined)).toBe(true);
     });
 
     describe('withDefinition', () => {
       test('requires object to match property types', () => {
         const definedObject = types.Object.withDefinition({
           test: types.String,
-          test2: types.Number.optional(),
+          test2: types.Number.optional,
         })
         expect(definedObject.matches({
           test: "hello",
@@ -155,33 +155,33 @@ describe('defined types', () => {
         expect(definedObject.matches(null)).toBe(false);
         expect(definedObject.matches(undefined)).toBe(false);
       });
-      test('optional() requires object to match property types or matches null and undefined', () => {
+      test('optional requires object to match property types or matches null and undefined', () => {
         const definedObject = types.Object.withDefinition({
           test: types.String,
-          test2: types.Number.optional(),
+          test2: types.Number.optional,
         })
-        expect(definedObject.optional().matches({
+        expect(definedObject.optional.matches({
           test: "hello",
           test2: 1,
         })).toBe(true);
-        expect(definedObject.optional().matches({
+        expect(definedObject.optional.matches({
           test: "hello",
         })).toBe(true);
-        expect(definedObject.optional().matches({
+        expect(definedObject.optional.matches({
           test2: 1,
         })).toBe(false);
-        expect(definedObject.optional().matches({
+        expect(definedObject.optional.matches({
           test: "hello",
           test2: 1,
           test3: 'hi',
         })).toBe(false);
-        expect(definedObject.optional().matches("test")).toBe(false);
-        expect(definedObject.optional().matches(1)).toBe(false);
-        expect(definedObject.optional().matches(true)).toBe(false);
-        expect(definedObject.optional().matches([])).toBe(false);
-        expect(definedObject.optional().matches({})).toBe(false);
-        expect(definedObject.optional().matches(null)).toBe(true);
-        expect(definedObject.optional().matches(undefined)).toBe(true);
+        expect(definedObject.optional.matches("test")).toBe(false);
+        expect(definedObject.optional.matches(1)).toBe(false);
+        expect(definedObject.optional.matches(true)).toBe(false);
+        expect(definedObject.optional.matches([])).toBe(false);
+        expect(definedObject.optional.matches({})).toBe(false);
+        expect(definedObject.optional.matches(null)).toBe(true);
+        expect(definedObject.optional.matches(undefined)).toBe(true);
       });
     });
   });
@@ -197,14 +197,14 @@ describe('defined types', () => {
       expect(types.Any.matches(undefined)).toBe(false);
     })
 
-    test('optional() matches any value including null or undefined', () => {
-      expect(types.Any.optional().matches("test")).toBe(true);
-      expect(types.Any.optional().matches(1)).toBe(true);
-      expect(types.Any.optional().matches(true)).toBe(true);
-      expect(types.Any.optional().matches([])).toBe(true);
-      expect(types.Any.optional().matches({})).toBe(true);
-      expect(types.Any.optional().matches(null)).toBe(true);
-      expect(types.Any.optional().matches(undefined)).toBe(true);
+    test('optional matches any value including null or undefined', () => {
+      expect(types.Any.optional.matches("test")).toBe(true);
+      expect(types.Any.optional.matches(1)).toBe(true);
+      expect(types.Any.optional.matches(true)).toBe(true);
+      expect(types.Any.optional.matches([])).toBe(true);
+      expect(types.Any.optional.matches({})).toBe(true);
+      expect(types.Any.optional.matches(null)).toBe(true);
+      expect(types.Any.optional.matches(undefined)).toBe(true);
     })
   });
 
@@ -223,13 +223,13 @@ describe('defined types', () => {
 
     test('matches any of the types in the union, null or undefined', () => {
       const stringOrNumber = types.unionOf(types.String, types.Number);
-      expect(stringOrNumber.optional().matches("test")).toBe(true);
-      expect(stringOrNumber.optional().matches(1)).toBe(true);
-      expect(stringOrNumber.optional().matches(true)).toBe(false);
-      expect(stringOrNumber.optional().matches([])).toBe(false);
-      expect(stringOrNumber.optional().matches({})).toBe(false);
-      expect(stringOrNumber.optional().matches(null)).toBe(true);
-      expect(stringOrNumber.optional().matches(undefined)).toBe(true);
+      expect(stringOrNumber.optional.matches("test")).toBe(true);
+      expect(stringOrNumber.optional.matches(1)).toBe(true);
+      expect(stringOrNumber.optional.matches(true)).toBe(false);
+      expect(stringOrNumber.optional.matches([])).toBe(false);
+      expect(stringOrNumber.optional.matches({})).toBe(false);
+      expect(stringOrNumber.optional.matches(null)).toBe(true);
+      expect(stringOrNumber.optional.matches(undefined)).toBe(true);
     })
   });
 });
@@ -297,7 +297,7 @@ describe('type coersion', () => {
       class TestClass {
         static matches(val) { return true; }
       }
-      expect(types.coerce(TestClass)).toBe(TestClass)
+      expect(types.coerce(TestClass)).toBe(TestClass);
     })
     test('if class doesn\'t define static matches, extended it to add a generic matches for instanceof', () => {
       class TestClass {}
@@ -305,6 +305,18 @@ describe('type coersion', () => {
       expect(coercedClass.prototype instanceof TestClass).toBe(true);
       expect(coercedClass).not.toBe(TestClass);
       expect(coercedClass.matches(new TestClass())).toBe(true);
+    })
+  });
+  describe('optional', () => {
+    test('the optional function will coerce types passed into it', () => {
+      const OptionalString = types.optional(String);
+      expect(OptionalString.matches("test")).toBe(true);
+      expect(OptionalString.matches(1)).toBe(false);
+      expect(OptionalString.matches(true)).toBe(false);
+      expect(OptionalString.matches([])).toBe(false);
+      expect(OptionalString.matches({})).toBe(false);
+      expect(OptionalString.matches(null)).toBe(true);
+      expect(OptionalString.matches(undefined)).toBe(true);
     })
   })
 })

@@ -30,6 +30,14 @@ export function coerce(type) {
   return derivedType;
 }
 
+export function optional(type) {
+  return class OptionalType extends coerce(type) {
+    static matches(val) {
+      return super.matches(val) || val === undefined || val === null;
+    }
+  };
+}
+
 export function matches(type, val) {
   return type.matches(val);
 }
@@ -40,12 +48,8 @@ export class BaseType {
     return false;
   }
 
-  static optional() {
-    return class OptionalType extends this {
-      static matches(val) {
-        return super.matches(val) || val === undefined || val === null;
-      }
-    };
+  static get optional() {
+    return optional(this);
   }
 }
 
@@ -114,6 +118,25 @@ class ObjectType extends BaseType {
           && Object.keys(val).every(key => !!this.properties[key]);
       }
     };
+  }
+
+  static keyValuePair(keyType, valueType) {
+    const coercedKeyType = coerce(keyType);
+    const coercedValueType = coerce(valueType);
+    return class ObjectKeyValuePair extends this {
+      static get keyType() {
+        return coercedKeyType;
+      }
+      static get valueType() {
+        return coercedValueType;
+      }
+
+      static matches(val) {
+        return super.matches(val)
+          && Object.keys(val).every(key => this.keyType.matches(key))
+          && Object.values(val).every(val => this.valueTYpe.matches(value));
+      }
+    }
   }
 }
 
