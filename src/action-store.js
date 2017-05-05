@@ -1,4 +1,4 @@
-import * as types from './types';
+import { defineType } from 'type-definitions';
 
 // look at redoing some of this
 // maybe export a static class rather than a bunch of functions
@@ -30,7 +30,7 @@ export function getActions() {
 export function addAction(type, schema) {
   actionSchemaStore[type] = {
     raw: schema,
-    coerced: types.coerce(schema),
+    coerced: defineType(schema),
   };
 }
 
@@ -47,7 +47,7 @@ export function validateActionPayload(type, payload) {
     return false;
   }
 
-  return getActionSchema(type).matches(payload);
+  return getActionSchema(type).isOfType(payload);
 }
 
 export function getCreatorForAction(type) {

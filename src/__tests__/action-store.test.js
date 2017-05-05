@@ -9,7 +9,7 @@ import {
   getCreatorForAction
 } from '../action-store';
 
-import * as types from '../types'
+import { types } from 'type-definitions'
 
 afterEach(clearActions);
 
